@@ -1,25 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Editar Usuario</title>
+  <title>Editando Usuario</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
   <style>
-    /* Agregue aquí sus estilos personalizados */
+    body {
+          background-image: url('https://images.unsplash.com/photo-1428908728789-d2de25dbd4e2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80');
+          background-size: cover;
+          height: 100vh;
+        }
+        .input-transparent {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
   </style>
 </head>
+
 <body>
-  <h1>Editar Usuario</h1>
-  <form action="/users/update/<%= user._id %>" method="POST">
-    <label for="name">Nombre:</label>
-    <input type="text" id="name" name="name" value="<%= user.name %>" required>
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" value="<%= user.email %>" required>
-    <label for="password">Contraseña:</label>
-    <input type="password" id="password" name="password" placeholder="Dejar en blanco para mantener la misma contraseña">
-    <button type="submit">Actualizar Usuario</button>
-  </form>
-  <hr>
-  <a href="/users">Regresar a la lista de usuarios</a>
+  <div class="container mt-5">
+ 
+    <div class="row justify-content-center">
+      
+        <div class="col-md-6 bg-transparent rounded border border-2 border-dark p-3">
+          <h1 class="text-center">Editar Usuario</h1>
+          <form action="/users/update/<%= user._id %>" method="POST">
+            <div class="mb-3">
+              <label for="name" class="form-label">Nombre:</label>
+              <input type="text" id="name" class="form-control input-transparent" name="name" value="<%= user.name %>">
+              <% errors.forEach((error) => { %>
+                <% if (error.path == 'name') { %>
+                    <p class="text-danger" style="font-style: italic;"><%= error.msg %></p>
+                  <% } %>
+              <% }) %>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email:</label>
+              <input type="email" id="email" class="form-control input-transparent" name="email" value="<%= user.email %>">
+              <% errors.forEach((error)=> { %>
+                <% if (error.path=='email' ) { %>
+                    <p class="text-danger" style="font-style: italic;"><%= error.msg %></p>
+                <% } %>
+              <% }) %>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña:</label>
+              <div class="input-group">
+                <input type="password" id="password" class="form-control input-transparent" name="password"
+                  placeholder="Contraseña">
+                <div class="input-group-text">
+                  <input type="checkbox" id="password-toggle">
+                  <label for="password-toggle">Ver</label>
+                </div>
+              </div>
+              <% errors.forEach((error)=> { %>
+                <% if (error.path=='password' ) { %>
+                    <p class="text-danger pass-error" style="font-style: italic;"><%= error.msg %></p>
+                <% } %>
+              <% }) %>
+            </div>
+            <div class="mb-3">
+              <button type="submit" class="btn btn-primary">Actualizar</button>
+            </div>
+          </form>
+          <hr>
+          <a class="btn btn-warning" href="/users">Regresar</a>
+        </div>
+      </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const passwordInput = document.getElementById("password");
+    const passwordToggle = document.getElementById("password-toggle");
+  
+    passwordToggle.addEventListener("change", function () {
+      if (passwordToggle.checked) {
+        passwordInput.type = "text";
+      } else {
+        passwordInput.type = "password";
+      }
+    });
+    
+    document.getElementById('name').addEventListener('input', function () {
+      document.getElementById('text-error').style.display = 'none';
+    });
+    document.getElementById('email').addEventListener('input', function () {
+        document.getElementById('email-error').style.display = 'none';
+    });
+    document.getElementById('password').addEventListener('input', function () {
+      limpiar();
+    });
+    
+    function limpiar() {
+      const passErrors = document.getElementsByClassName('pass-error');
+      for (let i = 0; i < passErrors.length; i++) {
+        passErrors[i].style.display = 'none';
+      }
+    }
+  </script>
 </body>
+
 </html>

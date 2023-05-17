@@ -6,8 +6,6 @@ const usersRouter = require('./routes/users');
 
 const app = express();
 
-
-
 mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
